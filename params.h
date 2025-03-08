@@ -8,9 +8,10 @@
 // INDEXED_DIM <= INPUT_DATA_DIM.
 #define INDEXED_DIM 6
 
-// Dimensionality used for the tensor cores, based on the dimensionality of the data.
-// Should fit the size of the matrices used by the tensor cores, depending on the precision and configuration.
-// Typically, the next multiple of 8 or 16 of INPUT_DATA_DIM.
+// Dimensionality used for the tensor cores, based on the dimensionality of the
+// data. Should fit the size of the matrices used by the tensor cores, depending
+// on the precision and configuration. Typically, the next multiple of 8 or 16
+// of INPUT_DATA_DIM.
 #define COMPUTE_DIM 32
 
 // Number of threads per block for the CUDA cores computation.
@@ -18,11 +19,12 @@
 // Number of warp per block and point per warp for the Tensor cores computation.
 #define WARP_PER_BLOCK 4
 
-// Number of GPU streams to use to overlap kernel invocations with data transfers.
+// Number of GPU streams to use to overlap kernel invocations with data
+// transfers.
 #define GPUSTREAMS 3
 
-// Precision of the input data, in which to compute in, and in which to accumulate the result in.
-// Used by both the CUDA cores and Tensor cores.
+// Precision of the input data, in which to compute in, and in which to
+// accumulate the result in. Used by both the CUDA cores and Tensor cores.
 // Possible values are:
 //   16: half precision
 //   32: single precision
@@ -32,14 +34,15 @@
 #define COMPUTE_PREC 64
 #define ACCUM_PREC 64
 
-// Add extra points at the end of the dataset to not get segmentation faults when filling tensor core fragments
+// Add extra points at the end of the dataset to not get segmentation faults
+// when filling tensor core fragments
 #define ADDITIONAL_POINTS 7
 
 // Amount of Insutrction Level Parallelism for the CUDA cores.
 #define ILP 8
 
-// 1 to periodically check the computed distance between a query and a candidate, and short-circuit its computation
-// if it reaches epsilon.
+// 1 to periodically check the computed distance between a query and a
+// candidate, and short-circuit its computation if it reaches epsilon.
 #define SHORT_CIRCUIT 1
 
 // Level of verbosity for informative or error messages.
@@ -60,13 +63,9 @@
 #define OUTPUT_NEIGHBORS 0
 #define OUTPUT_RESULTS 1
 
-
-
 /*********************************************************************/
 /*                 Code below should not be modified                 */
 /*********************************************************************/
-
-
 
 #define NB_ARGS_MAX 4
 #define FILENAME_ARG 1
@@ -74,45 +73,46 @@
 #define SEARCHMODE_ARG 3
 
 #define SM_GPU 11
-// Compute multiple query points from a same cell, using a combination of tensor and CUDA cores
+// Compute multiple query points from a same cell, using a combination of tensor
+// and CUDA cores
 #define SM_TENSOR_MQ_HYBRID 21
 
 #define WARP_SIZE 32
 
 #if COMPUTE_PREC == 16
-    #define NB_QUERY_POINTS_TENSOR 16
+#define NB_QUERY_POINTS_TENSOR 16
 #else
-    #define NB_QUERY_POINTS_TENSOR 8
+#define NB_QUERY_POINTS_TENSOR 8
 #endif
 
 #if INPUT_DATA_PREC == 16
-    #define INPUT_DATA_TYPE half
+#define INPUT_DATA_TYPE half
 #else
-    #if INPUT_DATA_PREC == 32
-        #define INPUT_DATA_TYPE float
-    #else
-        #define INPUT_DATA_TYPE double
-    #endif
+#if INPUT_DATA_PREC == 32
+#define INPUT_DATA_TYPE float
+#else
+#define INPUT_DATA_TYPE double
+#endif
 #endif
 
 #if COMPUTE_PREC == 16
-    #define COMPUTE_TYPE half
+#define COMPUTE_TYPE half
 #else
-    #if COMPUTE_PREC == 32
-        #define COMPUTE_TYPE float
-    #else
-        #define COMPUTE_TYPE double
-    #endif
+#if COMPUTE_PREC == 32
+#define COMPUTE_TYPE float
+#else
+#define COMPUTE_TYPE double
+#endif
 #endif
 
 #if ACCUM_PREC == 16
-    #define ACCUM_TYPE half
+#define ACCUM_TYPE half
 #else
-    #if ACCUM_PREC == 32
-        #define ACCUM_TYPE float
-    #else
-        #define ACCUM_TYPE double
-    #endif
+#if ACCUM_PREC == 32
+#define ACCUM_TYPE float
+#else
+#define ACCUM_TYPE double
+#endif
 #endif
 
 #endif
