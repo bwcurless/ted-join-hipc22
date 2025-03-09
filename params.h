@@ -1,8 +1,11 @@
 #ifndef PARAMS_H
 #define PARAMS_H
 
+#define KAHAN_CUDA false
+#define REORDER_DATASET false
+
 // Input data dimensionality (i.e., number of features of the dataset).
-#define INPUT_DATA_DIM 18
+// #define INPUT_DATA_DIM 18
 
 // Number of dimensions in which to index the data.
 // INDEXED_DIM <= INPUT_DATA_DIM.
@@ -12,7 +15,7 @@
 // data. Should fit the size of the matrices used by the tensor cores, depending
 // on the precision and configuration. Typically, the next multiple of 8 or 16
 // of INPUT_DATA_DIM.
-#define COMPUTE_DIM 32
+// #define COMPUTE_DIM 32
 
 // Number of threads per block for the CUDA cores computation.
 #define BLOCKSIZE 256
@@ -55,12 +58,12 @@
 
 // Result array size (number of elements)
 // A larger size implies fewer batches, and vice versa
-#define GPU_BUFFER_SIZE 50000000
+#define GPU_BUFFER_SIZE 200000000
 
 #define OUTPUT_DEBUG 0
 #define OUTPUT_DEBUG_SIZE 50000000
 #define OUTPUT_DEBUG_TENSOR 0
-#define OUTPUT_NEIGHBORS 0
+// #define OUTPUT_NEIGHBORS 1
 #define OUTPUT_RESULTS 1
 
 /*********************************************************************/
