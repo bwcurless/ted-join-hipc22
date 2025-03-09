@@ -425,13 +425,30 @@ distanceCalculationGridTensor_multiQueryPoints_double_8_8_4_tensor_mixed(
     unsigned int *gridLookupArr, struct gridCellLookup *gridCellLookupArr,
     double *minArr, unsigned int *nCells, unsigned int *cnt,
     unsigned int *nNonEmptyCells, int *pointIDKey, int *pointInDistVal) {
-  __shared__ double sharedArrayQueryPoints[WARP_PER_BLOCK * 8 * COMPUTE_DIM];
-  __shared__ double sharedArrayTmp8x4[WARP_PER_BLOCK * 8 * 4];
-  __shared__ double
-      sharedArraySquaredQueries[WARP_PER_BLOCK * 8 * (COMPUTE_DIM / 4)];
-  __shared__ double sharedArraySquaredCandidates[WARP_PER_BLOCK * 8];
-  __shared__ double sharedArrayResultTmp[WARP_PER_BLOCK * 8 * 8];
-  __shared__ double sharedArrayResult[WARP_PER_BLOCK * 8 * 8];
+
+  // Dynamically allocated shared memory to use the max amount.
+  extern __shared__ double shared_mem[];
+
+  using dcsma = distanceCalcsSharedMemAllocations;
+
+  double *sharedArrayQueryPoints = shared_mem;
+
+  double *sharedArrayTmp8x4 =
+      sharedArrayQueryPoints + dcsma::sharedArrayQueryPoints_size;
+
+  double *sharedArraySquaredQueries =
+      sharedArrayTmp8x4 + dcsma::sharedArrayTmp8x4_size;
+
+  double *sharedArraySquaredCandidates =
+      sharedArraySquaredQueries + dcsma::sharedArraySquaredQueries_size;
+
+  double *sharedArrayResultTmp =
+      sharedArraySquaredCandidates + dcsma::sharedArraySquaredCandidates_size;
+
+  double *sharedArrayResult =
+      sharedArrayResultTmp + dcsma::sharedArrayResultTmp_size;
+
+  size_t totalSharedMemRequired = dcsma::getTotalSize();
 
   unsigned int print = 1;
   unsigned int batchToPrint = 0;

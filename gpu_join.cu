@@ -672,8 +672,28 @@ void GPUJoinMainIndex(
       cout << "[GPU] ~ Using the Tensor Cores" << endl;
 #if COMPUTE_PREC == 64
       // Double precision kernel
+      // Requesting max amount of shared memory...
+      constexpr size_t maxSharedMemBytes = 160000;
+
+      using dcsma = distanceCalcsSharedMemAllocations;
+      static_assert(
+          dcsma::getTotalSize() < maxSharedMemBytes,
+          "Not enough shared memory to run distance calculation kernel");
+      (cudaFuncSetAttribute(
+          distanceCalculationGridTensor_multiQueryPoints_double_8_8_4_tensor_mixed,
+          cudaFuncAttributeMaxDynamicSharedMemorySize, dcsma::getTotalSize()));
+
+      errCode = cudaGetLastError();
+      if (cudaSuccess != errCode) {
+        cout << "[GPU] ~ ERROR IN ALLOCATING DYNAMIC MEMORY. ERROR: " << errCode
+             << '\n';
+        cout << "  Details: " << cudaGetErrorString(errCode) << endl;
+        throw std::runtime_error(
+            "failed to increase shared memory allocation for kernel");
+      }
+
       distanceCalculationGridTensor_multiQueryPoints_double_8_8_4_tensor_mixed<<<
-          nbBlock, tensorBlockSize, 0, stream[tid]>>>(
+          nbBlock, tensorBlockSize, dcsma::getTotalSize(), stream[tid]>>>(
           &dev_batchBegin[tid], &dev_batchEnd[tid], dev_database,
           dev_nbQueryPoints, dev_originPointIndex, dev_tensorBatches,
           dev_tensorBatchesSize, dev_preComputedSquaredCoordinates, dev_epsilon,

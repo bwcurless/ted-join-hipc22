@@ -5,6 +5,7 @@
 #include <string.h>
 #include <vector>
 
+#include "kernel_join.h"
 #include "omp.h"
 #include <boost/multiprecision/cpp_int.hpp>
 
@@ -47,6 +48,10 @@ int main(int argc, char *argv[]) {
   fprintf(stdout, "[Main] ~ Dataset: %s\n", filename);
   fprintf(stdout, "[Main] ~ Epsilon: %f\n", (double)epsilon);
   fprintf(stdout, "[Main] ~ Search mode: %d\n", searchMode);
+
+  /** Print out shared memory required for convenience **/
+  std::cout << "Shared memory required to run distance calculation kernel: "
+            << distanceCalcsSharedMemAllocations::getTotalSize() << std::endl;
 
   /***** Import dataset *****/
   std::vector<std::vector<INPUT_DATA_TYPE>> inputVector;
