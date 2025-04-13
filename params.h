@@ -5,6 +5,7 @@
 #define REORDER_DATASET false
 
 // Input data dimensionality (i.e., number of features of the dataset).
+// Removed for makefile to overwrite it
 // #define INPUT_DATA_DIM 18
 
 // Number of dimensions in which to index the data.
@@ -15,6 +16,7 @@
 // data. Should fit the size of the matrices used by the tensor cores, depending
 // on the precision and configuration. Typically, the next multiple of 8 or 16
 // of INPUT_DATA_DIM.
+// Removed for makefile to overwrite it
 // #define COMPUTE_DIM 32
 
 // Number of threads per block for the CUDA cores computation.

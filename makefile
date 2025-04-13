@@ -27,7 +27,7 @@ turing:
 
 monsoon:
 	echo "Compiling for Monsoon cluster with A100 (CC=80)"
-	$(MAKE) all ARCH=compute_80 CODE=sm_80 BOOST=/home/bc2497/boost_1_76_0
+	$(MAKE) all ARCH=compute_80 CODE=sm_80 BOOST=/home/bc2497/cuSimSearch/boost_1_76_0
 
 all: $(EXECUTABLE)
 
@@ -38,5 +38,5 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(FLAGS) -arch=$(ARCH) -code=$(CODE) -I$(BOOST) $^ -o $@
 
 clean:
-	rm $(OBJECTS)
-	rm $(EXECUTABLE)
+	rm -f $(OBJECTS)
+	rm -f $(EXECUTABLE)

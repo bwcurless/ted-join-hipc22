@@ -25,39 +25,74 @@ set -e
 module load cuda/11.4
 
 # A sanity check to make sure I get the same results as the paper
+#make clean
+#make monsoon OUTPUT_NEIGHBORS=false INPUT_DATA_DIM=18 COMPUTE_DIM=24
+#echo "susy running"
+#srun --unbuffered ./main /scratch/bc2497/datasets/SUSY_normalize_0_1.txt 0.021 21
+#echo "susy finished"
+
+# Get a plot of tedjoin flops for various dimensionality datasets to compare to my routine.
+# Targeting a selectivity of 64 for these tests
+# First do indexed search
 make clean
-make monsoon OUTPUT_NEIGHBORS=false INPUT_DATA_DIM=18 COMPUTE_DIM=24
-echo "susy running"
-srun --unbuffered ./main /scratch/bc2497/datasets/SUSY_normalize_0_1.txt 0.021 21
-echo "susy finished"
+make monsoon OUTPUT_NEIGHBORS=false INPUT_DATA_DIM=64 COMPUTE_DIM=64
+echo "64D running"
+srun --unbuffered ./main /scratch/bc2497/datasets/tedjoin_expo_data/dataset_fixed_len_pts_expo_NDIM_64_pts_100000.txt 0.1754 21
+srun --unbuffered ./main /scratch/bc2497/datasets/tedjoin_expo_data/dataset_fixed_len_pts_expo_NDIM_64_pts_100000.txt 0.1754 21
+srun --unbuffered ./main /scratch/bc2497/datasets/tedjoin_expo_data/dataset_fixed_len_pts_expo_NDIM_64_pts_100000.txt 0.1754 21
+
 
 make clean
 make monsoon OUTPUT_NEIGHBORS=false INPUT_DATA_DIM=128 COMPUTE_DIM=128
-echo "sift running"
-srun --unbuffered ./main /scratch/bc2497/datasets/sift10m_unscaled.txt 122.5 21
-srun --unbuffered ./main /scratch/bc2497/datasets/sift10m_unscaled.txt 122.5 21
-srun --unbuffered ./main /scratch/bc2497/datasets/sift10m_unscaled.txt 122.5 21
-srun --unbuffered ./main /scratch/bc2497/datasets/sift10m_unscaled.txt 136.5 21
-srun --unbuffered ./main /scratch/bc2497/datasets/sift10m_unscaled.txt 136.5 21
-srun --unbuffered ./main /scratch/bc2497/datasets/sift10m_unscaled.txt 136.5 21
-srun --unbuffered ./main /scratch/bc2497/datasets/sift10m_unscaled.txt 152.5 21
-srun --unbuffered ./main /scratch/bc2497/datasets/sift10m_unscaled.txt 152.5 21
-srun --unbuffered ./main /scratch/bc2497/datasets/sift10m_unscaled.txt 152.5 21
-echo "sift finished"
+echo "128D running"
+srun --unbuffered ./main /scratch/bc2497/datasets/tedjoin_expo_data/dataset_fixed_len_pts_expo_NDIM_128_pts_100000.txt 0.2873 21
+srun --unbuffered ./main /scratch/bc2497/datasets/tedjoin_expo_data/dataset_fixed_len_pts_expo_NDIM_128_pts_100000.txt 0.2873 21
+srun --unbuffered ./main /scratch/bc2497/datasets/tedjoin_expo_data/dataset_fixed_len_pts_expo_NDIM_128_pts_100000.txt 0.2873 21
+
+
+make clean
+make monsoon OUTPUT_NEIGHBORS=false INPUT_DATA_DIM=256 COMPUTE_DIM=256
+echo "256D running"
+srun --unbuffered ./main /scratch/bc2497/datasets/tedjoin_expo_data/dataset_fixed_len_pts_expo_NDIM_256_pts_100000.txt 0.449 21
+srun --unbuffered ./main /scratch/bc2497/datasets/tedjoin_expo_data/dataset_fixed_len_pts_expo_NDIM_256_pts_100000.txt 0.449 21
+srun --unbuffered ./main /scratch/bc2497/datasets/tedjoin_expo_data/dataset_fixed_len_pts_expo_NDIM_256_pts_100000.txt 0.449 21
+
 
 make clean
 make monsoon OUTPUT_NEIGHBORS=false INPUT_DATA_DIM=384 COMPUTE_DIM=384
-echo "tiny running"
-srun --unbuffered ./main /scratch/bc2497/datasets/tiny5m_unscaled.txt 0.18310546875 21
-srun --unbuffered ./main /scratch/bc2497/datasets/tiny5m_unscaled.txt 0.18310546875 21
-srun --unbuffered ./main /scratch/bc2497/datasets/tiny5m_unscaled.txt 0.18310546875 21
-srun --unbuffered ./main /scratch/bc2497/datasets/tiny5m_unscaled.txt 0.20458984375 21
-srun --unbuffered ./main /scratch/bc2497/datasets/tiny5m_unscaled.txt 0.20458984375 21
-srun --unbuffered ./main /scratch/bc2497/datasets/tiny5m_unscaled.txt 0.20458984375 21
-srun --unbuffered ./main /scratch/bc2497/datasets/tiny5m_unscaled.txt 0.2275390625 21
-srun --unbuffered ./main /scratch/bc2497/datasets/tiny5m_unscaled.txt 0.2275390625 21
-srun --unbuffered ./main /scratch/bc2497/datasets/tiny5m_unscaled.txt 0.2275390625 21
-echo "tiny finished"
+echo "384D running"
+srun --unbuffered ./main /scratch/bc2497/datasets/tedjoin_expo_data/dataset_fixed_len_pts_expo_NDIM_384_pts_100000.txt 0.4452 21
+srun --unbuffered ./main /scratch/bc2497/datasets/tedjoin_expo_data/dataset_fixed_len_pts_expo_NDIM_384_pts_100000.txt 0.4452 21
+srun --unbuffered ./main /scratch/bc2497/datasets/tedjoin_expo_data/dataset_fixed_len_pts_expo_NDIM_384_pts_100000.txt 0.4452 21
+
+
+#make clean
+#make monsoon OUTPUT_NEIGHBORS=false INPUT_DATA_DIM=128 COMPUTE_DIM=128
+#echo "sift running"
+#srun --unbuffered ./main /scratch/bc2497/datasets/sift10m_unscaled.txt 122.5 21
+#srun --unbuffered ./main /scratch/bc2497/datasets/sift10m_unscaled.txt 122.5 21
+#srun --unbuffered ./main /scratch/bc2497/datasets/sift10m_unscaled.txt 122.5 21
+#srun --unbuffered ./main /scratch/bc2497/datasets/sift10m_unscaled.txt 136.5 21
+#srun --unbuffered ./main /scratch/bc2497/datasets/sift10m_unscaled.txt 136.5 21
+#srun --unbuffered ./main /scratch/bc2497/datasets/sift10m_unscaled.txt 136.5 21
+#srun --unbuffered ./main /scratch/bc2497/datasets/sift10m_unscaled.txt 152.5 21
+#srun --unbuffered ./main /scratch/bc2497/datasets/sift10m_unscaled.txt 152.5 21
+#srun --unbuffered ./main /scratch/bc2497/datasets/sift10m_unscaled.txt 152.5 21
+#echo "sift finished"
+#
+#make clean
+#make monsoon OUTPUT_NEIGHBORS=false INPUT_DATA_DIM=384 COMPUTE_DIM=384
+#echo "tiny running"
+#srun --unbuffered ./main /scratch/bc2497/datasets/tiny5m_unscaled.txt 0.18310546875 21
+#srun --unbuffered ./main /scratch/bc2497/datasets/tiny5m_unscaled.txt 0.18310546875 21
+#srun --unbuffered ./main /scratch/bc2497/datasets/tiny5m_unscaled.txt 0.18310546875 21
+#srun --unbuffered ./main /scratch/bc2497/datasets/tiny5m_unscaled.txt 0.20458984375 21
+#srun --unbuffered ./main /scratch/bc2497/datasets/tiny5m_unscaled.txt 0.20458984375 21
+#srun --unbuffered ./main /scratch/bc2497/datasets/tiny5m_unscaled.txt 0.20458984375 21
+#srun --unbuffered ./main /scratch/bc2497/datasets/tiny5m_unscaled.txt 0.2275390625 21
+#srun --unbuffered ./main /scratch/bc2497/datasets/tiny5m_unscaled.txt 0.2275390625 21
+#srun --unbuffered ./main /scratch/bc2497/datasets/tiny5m_unscaled.txt 0.2275390625 21
+#echo "tiny finished"
 
 #make clean
 #make monsoon OUTPUT_NEIGHBORS=false INPUT_DATA_DIM=512 COMPUTE_DIM=512
