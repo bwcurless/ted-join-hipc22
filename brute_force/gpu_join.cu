@@ -89,6 +89,7 @@ void GPUJoinMainBruteForceNvidia(
     ACCUM_TYPE* epsilon,
     uint64_t* totalNeighbors)
 {
+/** Commented this out as it doesn't seem to compile, and I don't need it for my tests.
     cudaSetDevice(device);
     unsigned int nbBlockTmp = ceil((1.0 * (*nbQueryPoints)) / (1.0 * BLOCKSIZE));
 
@@ -204,6 +205,7 @@ void GPUJoinMainBruteForceNvidia(
 //        fprintf(stderr, "[GPU] ~ Error: Insufficient shared memory per multiprocessor. Requested: %zu, available: %zu\n", SHMEM_SZ, deviceProp.sharedMemPerMultiprocessor);
 //        fprintf(stderr, "[GPU] ~ Error: Cannot compute this kernel on this GPU.\n");
 //    }
+*/
 }
 
 
@@ -309,7 +311,8 @@ void GPUJoinMainBruteForce(
             #if INPUT_DATA_PREC != COMPUTE_PREC
                 distanceCalculationBruteForceTensorBasic<<<nbBlock, tensorBlockSize>>>(dev_nbQueryPoints, dev_datasetAlt, dev_epsilon, dev_identityMatrix, dev_cnt);
             #else
-                distanceCalculationBruteForceTensorBasic<<<nbBlock, tensorBlockSize>>>(dev_nbQueryPoints, dev_dataset, dev_epsilon, dev_identityMatrix, dev_cnt);
+// This is causing compilation issues too.
+                //distanceCalculationBruteForceTensorBasic<<<nbBlock, tensorBlockSize>>>(dev_nbQueryPoints, dev_dataset, dev_epsilon, dev_identityMatrix, dev_cnt);
             #endif
             break;
         }
