@@ -49,7 +49,6 @@ module load cuda/11.4
 #srun --unbuffered ./main /scratch/bc2497/datasets/tedjoin_expo_data/dataset_fixed_len_pts_expo_NDIM_128_pts_100000.txt 0.2873 4
 #srun --unbuffered ./main /scratch/bc2497/datasets/tedjoin_expo_data/dataset_fixed_len_pts_expo_NDIM_128_pts_100000.txt 0.2873 4
 #
-#### THESE DO NOT RUN, IT RUNS OUT OF SHARED MEMORY
 #
 make clean
 make monsoon INPUT_DATA_DIM=256 COMPUTE_DIM=256

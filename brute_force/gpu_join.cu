@@ -376,9 +376,29 @@ void GPUJoinMainBruteForce(unsigned int searchMode, unsigned int device,
         dev_preComputedSquaredCoordinates);
 #endif
 #else
+    // Requesting max amount of shared memory...
+    constexpr size_t maxSharedMemBytes = 160000;
+
+    using dcsma = distanceCalcsSharedMemAllocations;
+    static_assert(
+        dcsma::getTotalSize() < maxSharedMemBytes,
+        "Not enough shared memory to run distance calculation kernel");
+    (cudaFuncSetAttribute(distanceCalculationBruteForceTensorDoubleOpti,
+                          cudaFuncAttributeMaxDynamicSharedMemorySize,
+                          dcsma::getTotalSize()));
+
+    cudaError_t errCode = cudaGetLastError();
+    if (cudaSuccess != errCode) {
+      std::cout << "[GPU] ~ ERROR IN ALLOCATING DYNAMIC MEMORY. ERROR: "
+                << errCode << '\n';
+      std::cout << "  Details: " << cudaGetErrorString(errCode) << std::endl;
+      throw std::runtime_error(
+          "failed to increase shared memory allocation for kernel");
+    }
     const unsigned int nbBlock =
         ceil((1.0 * (*nbQueryPoints) * 4) / (1.0 * tensorBlockSize));
-    distanceCalculationBruteForceTensorDoubleOpti<<<nbBlock, tensorBlockSize>>>(
+    distanceCalculationBruteForceTensorDoubleOpti<<<nbBlock, tensorBlockSize,
+                                                    dcsma::getTotalSize()>>>(
         dev_nbQueryPoints, dev_dataset, dev_epsilon, dev_cnt,
         dev_preComputedSquaredCoordinates);
 #endif

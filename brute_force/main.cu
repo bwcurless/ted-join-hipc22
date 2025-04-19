@@ -10,6 +10,7 @@
 
 #include "dataset.h"
 #include "gpu_join.h"
+#include "kernel_join.h"
 #include "main.h"
 #include "params.h"
 
@@ -97,6 +98,10 @@ int main(int argc, char *argv[]) {
   std::cout << "[Main | Result] ~ Time to join: " << timeJoin << '\n';
   std::cout << "[Main | Result] ~ Total result set size: " << totalResult
             << '\n';
+
+  /** Print out shared memory required for convenience **/
+  std::cout << "Shared memory required to run distance calculation kernel: "
+            << distanceCalcsSharedMemAllocations::getTotalSize() << std::endl;
 
   std::ofstream outputResultFile;
   std::ifstream inputResultFile("tensor_brute-force.txt");

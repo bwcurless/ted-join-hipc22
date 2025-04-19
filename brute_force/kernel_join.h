@@ -68,4 +68,23 @@ __global__ void distanceCalculationBruteForceTensorDoubleOpti(
     unsigned int *nbQueryPoints, double *dataset, double *epsilon,
     unsigned long long *cnt, double *preComputedSquaredCoordinates);
 
+struct distanceCalcsSharedMemAllocations {
+public:
+  static constexpr size_t sharedArrayQueryPoints_size =
+      WARP_PER_BLOCK * 8 * COMPUTE_DIM;
+  static constexpr size_t sharedArrayTmp8x4_size = WARP_PER_BLOCK * 8 * 4;
+  static constexpr size_t sharedArraySquaredQueries_size =
+      WARP_PER_BLOCK * 8 * (COMPUTE_DIM / 4);
+  static constexpr size_t sharedArraySquaredCandidates_size =
+      WARP_PER_BLOCK * 8;
+  static constexpr size_t sharedArrayResultTmp_size = WARP_PER_BLOCK * 8 * 8;
+  static constexpr size_t sharedArrayResult_size = WARP_PER_BLOCK * 8 * 8;
+
+  static constexpr __device__ __host__ size_t getTotalSize() {
+    return 8 *
+           (sharedArrayQueryPoints_size + sharedArrayTmp8x4_size +
+            sharedArraySquaredQueries_size + sharedArraySquaredCandidates_size +
+            sharedArrayResultTmp_size + sharedArrayResult_size);
+  }
+};
 #endif

@@ -545,13 +545,37 @@ __global__ void distanceCalculationBruteForceTensorHalfOpti(
 __global__ void distanceCalculationBruteForceTensorDoubleOpti(
     unsigned int *nbQueryPoints, double *dataset, double *epsilon,
     unsigned long long *cnt, double *preComputedSquaredCoordinates) {
-  __shared__ double sharedArrayQueryPoints[WARP_PER_BLOCK * 8 * COMPUTE_DIM];
-  // __shared__ double sharedArrayTmp8x4[WARP_PER_BLOCK * 8 * 4];
-  __shared__ double
-      sharedArraySquaredQueries[WARP_PER_BLOCK * 8 * (COMPUTE_DIM / 4)];
-  __shared__ double sharedArraySquaredCandidates[WARP_PER_BLOCK * 8];
-  __shared__ double sharedArrayResult[WARP_PER_BLOCK * 8 * 8];
-  __shared__ double sharedArrayResultTmp[WARP_PER_BLOCK * 8 * 8];
+  //__shared__ double sharedArrayQueryPoints[WARP_PER_BLOCK * 8 * COMPUTE_DIM];
+  //// __shared__ double sharedArrayTmp8x4[WARP_PER_BLOCK * 8 * 4];
+  //__shared__ double sharedArraySquaredQueries[WARP_PER_BLOCK * 8 *
+  //(COMPUTE_DIM / 4)];
+  //__shared__ double sharedArraySquaredCandidates[WARP_PER_BLOCK * 8];
+  //__shared__ double sharedArrayResult[WARP_PER_BLOCK * 8 * 8];
+  //__shared__ double sharedArrayResultTmp[WARP_PER_BLOCK * 8 * 8];
+  // Dynamically allocated shared memory to use the max amount.
+
+  extern __shared__ double shared_mem[];
+
+  using dcsma = distanceCalcsSharedMemAllocations;
+
+  double *sharedArrayQueryPoints = shared_mem;
+
+  double *sharedArrayTmp8x4 =
+      sharedArrayQueryPoints + dcsma::sharedArrayQueryPoints_size;
+
+  double *sharedArraySquaredQueries =
+      sharedArrayTmp8x4 + dcsma::sharedArrayTmp8x4_size;
+
+  double *sharedArraySquaredCandidates =
+      sharedArraySquaredQueries + dcsma::sharedArraySquaredQueries_size;
+
+  double *sharedArrayResultTmp =
+      sharedArraySquaredCandidates + dcsma::sharedArraySquaredCandidates_size;
+
+  double *sharedArrayResult =
+      sharedArrayResultTmp + dcsma::sharedArrayResultTmp_size;
+
+  size_t totalSharedMemRequired = dcsma::getTotalSize();
 
   unsigned int tid = blockIdx.x * blockDim.x + threadIdx.x;
   unsigned int warpIdInGrid = tid / WARP_SIZE;
